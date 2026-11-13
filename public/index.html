@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#f3f4ee">
+	<title>JobScout | Seattle role fit</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			color-scheme: light;
+			--ink: #17231f;
+			--muted: #66716b;
+			--line: #d8ded7;
+			--paper: #f3f4ee;
+			--panel: #fffefa;
+			--forest: #164b3c;
+			--lime: #d9ef69;
+			--coral: #e5674e;
+			--soft-green: #e6eee6;
+			--mono: "DM Mono", "SFMono-Regular", Consolas, monospace;
+			--sans: "Manrope", "Avenir Next", sans-serif;
+		}
+		* { box-sizing: border-box; }
+		body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 14px; }
+		button, input, textarea, select { font: inherit; }
+		button { cursor: pointer; }
+		.frame { min-height: 100vh; background-image: radial-gradient(#8a988f 0.65px, transparent 0.65px); background-size: 18px 18px; }
+		header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px clamp(20px, 5vw, 72px); border-bottom: 1px solid var(--line); background: rgba(243,244,238,.92); }
+		.brand { display: flex; align-items: center; gap: 11px; font-size: 14px; font-weight: 800; letter-spacing: 0; }
+		.brand-mark { display: grid; width: 34px; aspect-ratio: 1; place-items: center; border-radius: 50%; background: var(--forest); color: var(--lime); font-size: 19px; line-height: 1; }
+		.header-meta { display: flex; align-items: center; gap: 10px; color: var(--muted); font: 11px var(--mono); text-transform: uppercase; }
+		.header-meta span { padding: 8px 10px; border: 1px solid var(--line); border-radius: 3px; background: var(--panel); }
+		.header-meta a { color: var(--forest); white-space: nowrap; }
+		main { width: min(1320px, 100%); margin: 0 auto; padding: 42px clamp(20px, 5vw, 72px) 68px; }
+		.intro { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 24px; padding: 8px 0 30px; animation: arrive .45s ease-out both; }
+		.kicker { margin: 0 0 10px; color: var(--forest); font: 11px var(--mono); letter-spacing: 0; text-transform: uppercase; }
+		h1 { margin: 0; font-size: clamp(32px, 4vw, 48px); line-height: 1.06; letter-spacing: 0; }
+		.intro p { max-width: 640px; margin: 14px 0 0; color: var(--muted); line-height: 1.65; }
+		.target-stamp { min-width: 168px; padding: 14px 16px; border-left: 3px solid var(--coral); background: var(--panel); box-shadow: 0 5px 16px #17231f0b; }
+		.target-stamp small { display: block; color: var(--muted); font: 10px var(--mono); text-transform: uppercase; }
+		.target-stamp strong { display: block; margin-top: 6px; color: var(--forest); font-size: 16px; }
+		.discovery { margin-bottom: 20px; }
+		.discovery-controls { display: grid; grid-template-columns: minmax(0, 1fr) 175px auto; align-items: end; gap: 12px; padding: 18px 22px; }
+		.discovery-controls select { width: 100%; height: 42px; padding: 0 10px; border: 1px solid #cbd3cc; border-radius: 3px; background: white; color: var(--ink); }
+		.schedule-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 0 22px 14px; }
+		.schedule-controls label { display: flex; align-items: center; gap: 7px; }
+		.schedule-controls input { width: 16px; height: 16px; margin: 0; accent-color: var(--forest); }
+		.schedule-controls button:disabled { opacity: .5; cursor: not-allowed; }
+		.schedule-status { flex-basis: 100%; color: var(--muted); font-size: 11px; line-height: 1.5; }
+		.discovery-notice { margin: 0; padding: 0 22px 14px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+		.discovery-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+		.discovery-list:empty { display: none; }
+		.discovered-job { min-width: 0; padding: 15px 22px; border-bottom: 1px solid #e8ebe6; }
+		.discovered-job:nth-child(odd) { border-right: 1px solid #e8ebe6; }
+		.discovered-job h3 { margin: 0; font-size: 13px; overflow-wrap: anywhere; }
+		.discovered-job p { margin: 5px 0 10px; color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
+		.discovered-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+		.discovered-actions a { color: var(--forest); font-size: 11px; }
+		.more-jobs { margin: 12px 22px 16px; }
+		.workspace { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr); gap: 20px; align-items: start; }
+		.panel { min-width: 0; border: 1px solid var(--line); background: var(--panel); box-shadow: 0 9px 26px #17231f08; animation: arrive .5s ease-out both; }
+		.panel:nth-child(2) { animation-delay: .08s; }
+		.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 19px 22px; border-bottom: 1px solid var(--line); }
+		.panel-head h2 { margin: 0; font-size: 15px; letter-spacing: 0; }
+		.panel-head span { color: var(--muted); font: 10px var(--mono); text-transform: uppercase; }
+		form { padding: 22px; }
+		.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 13px; }
+		.field { display: grid; gap: 7px; }
+		.field.full { grid-column: 1 / -1; }
+		label { color: #38443e; font-size: 12px; font-weight: 700; }
+		label .optional { color: #8a938e; font-weight: 500; }
+		input, textarea { width: 100%; border: 1px solid #cbd3cc; border-radius: 3px; outline: none; background: #fff; color: var(--ink); transition: border-color .15s, box-shadow .15s; }
+		input { height: 42px; padding: 0 12px; }
+		textarea { min-height: 130px; padding: 11px 12px; resize: vertical; line-height: 1.5; }
+		#job-posting { min-height: 176px; }
+		input:focus, textarea:focus { border-color: var(--forest); box-shadow: 0 0 0 3px #164b3c1b; }
+		input::placeholder, textarea::placeholder { color: #9aa39d; }
+		.form-foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 18px; }
+		.privacy-note { max-width: 390px; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+		.primary { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 43px; padding: 0 17px; border: 0; border-radius: 3px; background: var(--forest); color: white; font-size: 12px; font-weight: 800; white-space: nowrap; transition: background .15s, transform .15s; }
+		.primary:hover { transform: translateY(-1px); background: #22624f; }
+		.primary:disabled { cursor: wait; opacity: .7; transform: none; }
+		.primary svg, .icon-button svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+		.notice { min-height: 20px; margin: 12px 0 0; color: var(--coral); font-size: 12px; }
+		.results { display: none; margin: 0 22px 22px; padding: 19px; border: 1px solid #bfd0be; background: #f2f6ec; animation: arrive .3s ease-out both; }
+		.results.visible { display: block; }
+		.result-top { display: flex; align-items: start; justify-content: space-between; gap: 14px; }
+		.result-top h3 { margin: 0; font-size: 16px; }
+		.score { display: grid; width: 56px; aspect-ratio: 1; flex: 0 0 auto; place-items: center; border-radius: 50%; background: var(--forest); color: var(--lime); font: 17px var(--mono); }
+		.verdict { margin: 10px 0 15px; line-height: 1.55; }
+		.review-guidance { margin: 0 0 14px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+		.signals { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 16px; }
+		.signal { padding: 10px; background: #fffefa; }
+		.signal small { display: block; margin-bottom: 5px; color: var(--muted); font: 10px var(--mono); text-transform: uppercase; }
+		.signal strong { font-size: 12px; }
+		.result-section { margin-top: 15px; }
+		.result-section h4 { margin: 0 0 7px; color: var(--forest); font: 10px var(--mono); text-transform: uppercase; }
+		.result-section ul { display: grid; gap: 6px; margin: 0; padding-left: 17px; color: #39453f; font-size: 12px; line-height: 1.45; }
+		.evidence { display: grid; gap: 8px; }
+		.evidence-row { padding: 10px; border-left: 2px solid #9bb498; background: #fffefa; font-size: 11px; line-height: 1.45; }
+		.evidence-row.gap { border-color: var(--coral); }
+		.evidence-row.unclear { border-color: #b6a449; }
+		.evidence-row strong { display: block; margin-bottom: 4px; }
+		.evidence-row span { color: var(--muted); }
+		.shortlist-head { align-items: flex-start; }
+		.shortlist-count { min-width: 25px; padding: 5px 7px; border-radius: 20px; background: var(--soft-green); color: var(--forest) !important; text-align: center; }
+		.shortlist { display: grid; }
+		.empty { padding: 34px 22px 40px; color: var(--muted); text-align: center; }
+		.empty-mark { display: grid; width: 48px; aspect-ratio: 1; margin: 0 auto 13px; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--forest); font-size: 20px; }
+		.empty strong { display: block; margin-bottom: 5px; color: var(--ink); font-size: 13px; }
+		.empty p { margin: 0; font-size: 11px; line-height: 1.5; }
+		.opportunity { padding: 16px 18px; border-bottom: 1px solid #e8ebe6; }
+		.opportunity:last-child { border-bottom: 0; }
+		.opp-top { display: flex; justify-content: space-between; gap: 10px; }
+		.opp-title { min-width: 0; }
+		.opp-title h3 { overflow: hidden; margin: 0; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+		.opp-title p { overflow: hidden; margin: 4px 0 0; color: var(--muted); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+		.opp-score { color: var(--forest); font: 12px var(--mono); white-space: nowrap; }
+		.opp-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-top: 11px; }
+		.status-select { max-width: 120px; height: 27px; padding: 0 7px; border: 1px solid var(--line); border-radius: 3px; background: white; color: var(--forest); font-size: 10px; }
+		.meta-tag { max-width: 100%; padding: 5px 7px; background: #f0f2ec; color: #4c5a51; font: 9px var(--mono); overflow-wrap: anywhere; }
+		.view-review { min-height: 27px; padding: 0 8px; border: 1px solid #b9c9b8; border-radius: 3px; background: #f2f6ec; color: var(--forest); font-size: 10px; font-weight: 700; }
+		.view-review:hover { background: var(--soft-green); }
+		.icon-button { display: inline-grid; width: 29px; height: 27px; margin-left: auto; place-items: center; border: 1px solid transparent; border-radius: 3px; background: transparent; color: #78827b; }
+		.icon-button:hover { border-color: #edc7be; background: #fff3ef; color: #b54734; }
+		.icon-button svg { width: 14px; height: 14px; }
+		footer { display: flex; justify-content: space-between; gap: 16px; margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line); color: #77817a; font-size: 10px; line-height: 1.5; }
+		footer span:last-child { font-family: var(--mono); white-space: nowrap; }
+		@keyframes arrive { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+		@media (max-width: 840px) { .workspace { grid-template-columns: 1fr; } .intro { grid-template-columns: 1fr auto; } }
+		@media (max-width: 560px) {
+			header { padding: 14px 18px; }
+			.header-meta { gap: 6px; font-size: 9px; }
+			.header-meta span { padding: 7px; }
+			main { padding: 27px 14px 42px; }
+			.intro { grid-template-columns: 1fr; gap: 15px; padding-bottom: 21px; }
+			h1 { font-size: 34px; }
+			.target-stamp { display: flex; justify-content: space-between; align-items: center; min-width: 0; padding: 10px 12px; border-left-width: 3px; }
+			.target-stamp strong { margin-top: 0; font-size: 13px; }
+			.discovery-controls { grid-template-columns: 1fr; padding: 16px; }
+			.schedule-controls { padding: 0 16px 14px; }
+			.discovery-list { grid-template-columns: 1fr; }
+			.discovered-job { padding: 15px 16px; }
+			.discovered-job:nth-child(odd) { border-right: 0; }
+			.panel-head { padding: 16px; }
+			form { padding: 16px; }
+			.fields { grid-template-columns: 1fr; }
+			.field.full { grid-column: auto; }
+			.form-foot { align-items: stretch; flex-direction: column; }
+			.primary { width: 100%; }
+			.results { margin: 0 16px 16px; padding: 15px; }
+			footer { flex-direction: column; }
+			footer span:last-child { white-space: normal; }
+		}
+		@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+	</style>
+</head>
+<body>
+	<div class="frame">
+		<header>
+			<div class="brand"><span class="brand-mark" aria-hidden="true">⌖</span> JobScout</div>
+			<div class="header-meta"><span>Seattle / Eastside</span><span>Role fit desk</span><a id="signout" href="/auth/signout" hidden>Sign out</a></div>
+		</header>
+		<main>
+			<section class="intro" aria-labelledby="page-title">
+				<div>
+					<p class="kicker">Career search / 01</p>
+					<h1 id="page-title">Make the next move<br>count.</h1>
+					<p>Compare a role with your verified experience, surface the real gaps, and keep a thoughtful shortlist. No applications are sent from here.</p>
+				</div>
+				<div class="target-stamp"><small>Search priority</small><strong>Seattle · $200K+</strong></div>
+			</section>
+			<section class="panel discovery" aria-labelledby="discovery-title">
+				<div class="panel-head"><h2 id="discovery-title">Discover roles</h2><span>CoreWeave / Cloudflare</span></div>
+				<div class="discovery-controls">
+					<div class="field"><label for="discovery-keywords">Role keywords</label><input id="discovery-keywords" placeholder="e.g. platform, infrastructure"></div>
+					<div class="field"><label for="discovery-location">Location</label><select id="discovery-location"><option value="seattle">Seattle area</option><option value="remote">Remote</option><option value="all">All locations</option></select></div>
+					<button class="primary" type="button" id="discover-button">Search jobs</button>
+				</div>
+				<div class="schedule-controls">
+					<label for="schedule-enabled"><input id="schedule-enabled" type="checkbox"> Scan every 24 hours</label>
+					<button class="view-review" id="scan-now" type="button">Scan now</button>
+					<button class="view-review" id="show-latest" type="button" disabled>View latest scan</button>
+					<div class="schedule-status" id="schedule-status" role="status" aria-live="polite">Loading scan status...</div>
+				</div>
+				<p class="discovery-notice" id="discovery-notice" role="status" aria-live="polite">Compensation is not verified in these search results.</p>
+				<div class="discovery-list" id="discovery-list"></div>
+				<button class="view-review more-jobs" id="more-jobs" type="button" hidden>Show more</button>
+			</section>
+			<div class="workspace">
+				<section class="panel" aria-labelledby="review-title">
+					<div class="panel-head"><h2 id="review-title">Review a role</h2><span>01 / role fit</span></div>
+					<form id="review-form">
+						<div class="fields">
+							<div class="field"><label for="company">Company <span class="optional">(optional)</span></label><input id="company" name="company" autocomplete="organization" maxlength="120" placeholder="Company name"></div>
+							<div class="field"><label for="role">Role title <span class="optional">(optional)</span></label><input id="role" name="role" maxlength="160" placeholder="e.g. Staff Software Engineer"></div>
+							<div class="field full"><label for="url">Job link <span class="optional">(optional)</span></label><input id="url" name="url" type="url" maxlength="500" placeholder="https://"></div>
+							<div class="field full"><label for="resume-facts">Your verified experience</label><textarea id="resume-facts" name="resumeFacts" required maxlength="16000" placeholder="Paste only facts you can stand behind: roles, dates, scope, technologies, outcomes, and credentials. Remove personal contact details."></textarea></div>
+							<div class="field full"><label for="job-posting">Job description</label><textarea id="job-posting" name="jobPosting" required maxlength="16000" placeholder="Paste the full job description, including location and compensation details when available."></textarea></div>
+						</div>
+						<div class="form-foot">
+							<p class="privacy-note">Your pasted text is sent to Workers AI and retained in Workflow execution data. Local results are tied to this browser; deployed results are tied to your account.</p>
+							<button class="primary" id="analyze-button" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7"/></svg><span>Analyze &amp; save</span></button>
+						</div>
+						<p class="notice" id="form-notice" role="status" aria-live="polite"></p>
+					</form>
+					<article class="results" id="results" aria-live="polite"></article>
+				</section>
+				<section class="panel" aria-labelledby="shortlist-title">
+					<div class="panel-head shortlist-head"><div><h2 id="shortlist-title">Your shortlist</h2><span style="display:block;margin-top:5px">Saved reviews</span></div><span class="shortlist-count" id="shortlist-count">0</span></div>
+					<div class="shortlist" id="shortlist"><div class="empty"><span class="empty-mark" aria-hidden="true">＋</span><strong>Nothing saved yet</strong><p>Reviewed roles will collect here with their fit notes and current status.</p></div></div>
+				</section>
+			</div>
+			<footer><span>AI analysis is a proposal, not a hiring decision. Verify every claim against the original posting and your own records.</span><span>JOBSCOUT / SEATTLE SEARCH</span></footer>
+		</main>
+	</div>
+	<script>
+		const idKey = "jobscout-browser-id";
+		const pendingReviewKey = "jobscout-pending-review";
+		let browserId = localStorage.getItem(idKey);
+		if (!browserId) {
+			browserId = crypto.randomUUID();
+			localStorage.setItem(idKey, browserId);
+		}
+		const form = document.querySelector("#review-form");
+		const submitButton = document.querySelector("#analyze-button");
+		const notice = document.querySelector("#form-notice");
+		const results = document.querySelector("#results");
+		const shortlist = document.querySelector("#shortlist");
+		const count = document.querySelector("#shortlist-count");
+		const discoverButton = document.querySelector("#discover-button");
+		const discoveryNotice = document.querySelector("#discovery-notice");
+		const discoveryList = document.querySelector("#discovery-list");
+		const keywords = document.querySelector("#discovery-keywords");
+		const locationFilter = document.querySelector("#discovery-location");
+		const moreJobs = document.querySelector("#more-jobs");
+		const scheduleEnabled = document.querySelector("#schedule-enabled");
+		const scanNow = document.querySelector("#scan-now");
+		const showLatest = document.querySelector("#show-latest");
+		const scheduleStatus = document.querySelector("#schedule-status");
+		const signout = document.querySelector("#signout");
+		let discoveredJobs = [];
+		let authMethod = "local";
+		let lastScheduleStatus = null;
+		let scheduledSnapshot = null;
+		let scheduleBusy = false;
+		let discoverySearched = false;
+		let unavailableBoards = [];
+		let displayLimit = 20;
+		let opportunities = [];
+		let selectedOpportunityId = null;
+		const escapeHTML = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+		const headers = { "X-JobScout-Id": browserId };
+		async function api(path, options = {}) {
+			const response = await fetch(path, { ...options, headers: { ...headers, ...(options.headers || {}) } });
+			const data = await response.json();
+			if (!response.ok) {
+				if (response.status === 401 && data.error === "GitHub sign-in is required.") window.location.assign("/auth/signin");
+				const error = new Error(data.error || "Something went wrong.");
+				error.status = response.status;
+				throw error;
+			}
+			return data;
+		}
+		function safeHref(value) {
+			try { const url = new URL(value); return ["https:", "http:"].includes(url.protocol) ? url.href : ""; }
+			catch { return ""; }
+		}
+		function renderSchedule(status) {
+			lastScheduleStatus = status;
+			scheduleEnabled.checked = status.enabled;
+			scheduledSnapshot = status.discovery;
+			showLatest.disabled = !scheduledSnapshot;
+			const next = status.nextRunAt ? `Next scan: ${new Date(status.nextRunAt).toLocaleString()}.` : "Daily scan is off.";
+			const last = scheduledSnapshot ? ` Last scan: ${new Date(scheduledSnapshot.scannedAt).toLocaleString()}.` : " No scan saved yet.";
+			const unavailable = scheduledSnapshot?.unavailable.length ? ` Unavailable: ${scheduledSnapshot.unavailable.join(", ")}.` : "";
+			const failure = status.errorAt ? ` Last attempt failed: ${new Date(status.errorAt).toLocaleString()}.` : "";
+			const runtime = authMethod === "local" ? "Local scans run only while the dev server is running." : "Scheduled scans run on Cloudflare.";
+			scheduleStatus.textContent = `${next}${last}${unavailable}${failure} ${runtime}`;
+		}
+		async function loadSession() {
+			try {
+				const session = await api("/api/session");
+				authMethod = session.method;
+				signout.hidden = authMethod !== "github";
+				if (lastScheduleStatus) renderSchedule(lastScheduleStatus);
+			} catch (error) { notice.textContent = error.message; }
+		}
+		async function loadSchedule() {
+			if (scheduleBusy) return;
+			try { renderSchedule(await api("/api/discovery/schedule")); }
+			catch (error) { scheduleStatus.textContent = error.message; }
+		}
+		scheduleEnabled.addEventListener("change", async () => {
+			const enabled = scheduleEnabled.checked;
+			scheduleBusy = true;
+			scheduleEnabled.disabled = true;
+			scanNow.disabled = true;
+			try { renderSchedule(await api("/api/discovery/schedule", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ enabled }) })); }
+			catch (error) { scheduleEnabled.checked = !enabled; scheduleStatus.textContent = error.message; }
+			finally { scheduleBusy = false; scheduleEnabled.disabled = false; scanNow.disabled = false; }
+		});
+		scanNow.addEventListener("click", async () => {
+			scheduleBusy = true;
+			scheduleEnabled.disabled = true;
+			scanNow.disabled = true;
+			scheduleStatus.textContent = "Scanning employer job boards...";
+			try { renderSchedule(await api("/api/discovery/refresh", { method: "POST" })); }
+			catch (error) {
+				try {
+					renderSchedule(await api("/api/discovery/schedule"));
+					scheduleStatus.textContent += ` ${error.message}`;
+				} catch { scheduleStatus.textContent = error.message; }
+			}
+			finally { scheduleBusy = false; scheduleEnabled.disabled = false; scanNow.disabled = false; }
+		});
+		showLatest.addEventListener("click", () => {
+			if (!scheduledSnapshot) return;
+			discoveredJobs = scheduledSnapshot.jobs;
+			unavailableBoards = scheduledSnapshot.unavailable;
+			discoverySearched = true;
+			displayLimit = 20;
+			renderDiscovery();
+		});
+		function renderDiscovery() {
+			if (!discoverySearched) return;
+			const terms = keywords.value.toLowerCase().split(/[\s,]+/).filter(Boolean);
+			const filtered = discoveredJobs.filter((job) => {
+				const title = job.title.toLowerCase();
+				const location = job.location.toLowerCase();
+				const locationMatches = locationFilter.value === "all" || (locationFilter.value === "remote"
+					? /\bremote\b/.test(location)
+					: /\b(seattle|bellevue|redmond|kirkland|issaquah|renton|tukwila|bothell|everett)\b/.test(location));
+				return locationMatches && terms.every((term) => title.includes(term));
+			});
+			discoveryNotice.textContent = `${filtered.length} roles found. Compensation is not verified in these results.${unavailableBoards.length ? ` Unavailable: ${unavailableBoards.join(", ")}.` : ""}`;
+			discoveryList.innerHTML = filtered.slice(0, displayLimit).map((job) => `<article class="discovered-job"><h3>${escapeHTML(job.title)}</h3><p>${escapeHTML(job.company)} · ${escapeHTML(job.location)}</p><div class="discovered-actions"><button class="view-review" type="button" data-import-board="${escapeHTML(job.board)}" data-import-id="${escapeHTML(job.id)}">Review role</button><a href="${escapeHTML(job.url)}" target="_blank" rel="noopener noreferrer">Original posting ↗</a></div></article>`).join("");
+			moreJobs.hidden = filtered.length <= displayLimit;
+		}
+		discoverButton.addEventListener("click", async () => {
+			discoverButton.disabled = true;
+			discoverButton.textContent = "Searching…";
+			discoveryNotice.textContent = "Checking employer job boards…";
+			try {
+				const data = await api("/api/discover");
+				discoveredJobs = data.jobs;
+				unavailableBoards = data.unavailable;
+				discoverySearched = true;
+				displayLimit = 20;
+				renderDiscovery();
+			} catch (error) {
+				discoveredJobs = [];
+				discoverySearched = false;
+				discoveryList.innerHTML = "";
+				moreJobs.hidden = true;
+				discoveryNotice.textContent = error.message;
+			}
+			finally { discoverButton.disabled = false; discoverButton.textContent = "Search jobs"; }
+		});
+		for (const control of [keywords, locationFilter]) control.addEventListener("input", () => { displayLimit = 20; renderDiscovery(); });
+		moreJobs.addEventListener("click", () => { displayLimit += 20; renderDiscovery(); });
+		discoveryList.addEventListener("click", async (event) => {
+			const button = event.target.closest("[data-import-board]");
+			if (!button) return;
+			if (form.elements.jobPosting.value && !confirm("Replace the job description currently in the review form?")) return;
+			button.disabled = true;
+			button.textContent = "Loading…";
+			try {
+				const job = await api(`/api/discover/${encodeURIComponent(button.dataset.importBoard)}/${encodeURIComponent(button.dataset.importId)}`);
+				form.elements.company.value = job.company;
+				form.elements.role.value = job.role;
+				form.elements.url.value = job.url;
+				form.elements.jobPosting.value = job.jobPosting;
+				notice.textContent = job.truncated ? "The posting exceeded 16,000 characters and was truncated. Check the original posting for missing details." : "";
+				form.scrollIntoView({ behavior: "smooth", block: "start" });
+				form.elements.resumeFacts.focus({ preventScroll: true });
+			} catch (error) { discoveryNotice.textContent = error.message; }
+			finally { button.disabled = false; button.textContent = "Review role"; }
+		});
+		function renderAnalysis(item) {
+			selectedOpportunityId = item.id;
+			const analysis = item.analysis;
+			const hasSourceChecks = analysis.evidence.some((entry) => entry.sourceChecks);
+			const strengths = analysis.strengths.length ? analysis.strengths : ["No source-matched strengths were returned."];
+			const gaps = analysis.gaps.length ? analysis.gaps : ["No gaps were returned."];
+			results.innerHTML = `<div class="result-top"><div><p class="kicker">AI-generated proposal</p><h3>${escapeHTML(item.role)}${item.company ? ` · ${escapeHTML(item.company)}` : ""}</h3></div><span class="score" aria-label="AI-estimated ${escapeHTML(analysis.matchScore)} percent match">${escapeHTML(analysis.matchScore)}</span></div>
+				<p class="verdict">${escapeHTML(analysis.verdict)}</p>
+				<p class="review-guidance">The score and interpretation are AI estimates. Source checks only locate quoted text; they do not prove a claim.</p>
+				<div class="signals"><div class="signal"><small>Location evidence</small><strong>${escapeHTML(analysis.location)}</strong></div><div class="signal"><small>Compensation evidence</small><strong>${escapeHTML(analysis.salary)}</strong></div></div>
+				<div class="result-section"><h4>${hasSourceChecks ? "AI-proposed strengths with matching excerpts" : "AI-proposed strengths"}</h4><ul>${strengths.map((text) => `<li>${escapeHTML(text)}</li>`).join("")}</ul></div>
+				<div class="result-section"><h4>Gaps to consider</h4><ul>${gaps.map((text) => `<li>${escapeHTML(text)}</li>`).join("")}</ul></div>
+				${analysis.evidence.length ? `<div class="result-section"><h4>Evidence check</h4><div class="evidence">${analysis.evidence.map((entry) => {
+					const sourceLabel = (check) => check === "found" ? "found in input" : check === "not_found" ? "not found in input" : check === "insufficient" ? "too short or unspecified to check" : "not checked";
+					const resumeCheck = sourceLabel(entry.sourceChecks?.resume);
+					const jobCheck = sourceLabel(entry.sourceChecks?.job);
+					return `<div class="evidence-row ${escapeHTML(entry.status)}"><strong>${escapeHTML(entry.claim)} · AI assessment: ${escapeHTML(entry.status)}</strong><span>Experience excerpt (${resumeCheck}): ${escapeHTML(entry.resumeEvidence)}<br>Role excerpt (${jobCheck}): ${escapeHTML(entry.jobRequirement)}</span></div>`;
+				}).join("")}</div></div>` : ""}`;
+			results.classList.add("visible");
+			results.scrollIntoView({ behavior: "smooth", block: "nearest" });
+		}
+		function renderList(items) {
+			opportunities = items;
+			count.textContent = String(items.length);
+			if (!items.length) {
+				shortlist.innerHTML = `<div class="empty"><span class="empty-mark" aria-hidden="true">＋</span><strong>Nothing saved yet</strong><p>Reviewed roles will collect here with their fit notes and current status.</p></div>`;
+				return;
+			}
+			shortlist.innerHTML = items.map((item) => {
+				const href = safeHref(item.url);
+				return `<article class="opportunity"><div class="opp-top"><div class="opp-title"><h3>${href ? `<a href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer">${escapeHTML(item.role)}</a>` : escapeHTML(item.role)}</h3><p>${escapeHTML(item.company)} · ${new Date(item.createdAt).toLocaleDateString()}</p></div><span class="opp-score" title="AI-estimated match, not source-verified" aria-label="AI-estimated ${escapeHTML(item.analysis.matchScore)} percent match">${escapeHTML(item.analysis.matchScore)}%</span></div><div class="opp-meta"><button class="view-review" type="button" data-view-id="${escapeHTML(item.id)}" aria-label="View review for ${escapeHTML(item.role)}">View review</button><select class="status-select" aria-label="Status for ${escapeHTML(item.role)}" data-status-id="${escapeHTML(item.id)}"><option${item.status === "Saved" ? " selected" : ""}>Saved</option><option${item.status === "Applied" ? " selected" : ""}>Applied</option><option${item.status === "Archived" ? " selected" : ""}>Archived</option></select><span class="meta-tag">${escapeHTML(item.analysis.location)}</span><span class="meta-tag">${escapeHTML(item.analysis.salary)}</span><button class="icon-button" type="button" title="Delete opportunity" aria-label="Delete ${escapeHTML(item.role)}" data-delete-id="${escapeHTML(item.id)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg></button></div></article>`;
+			}).join("");
+		}
+		async function loadList() {
+			try { const data = await api("/api/opportunities"); renderList(data.opportunities); }
+			catch (error) { notice.textContent = error.message; }
+		}
+		async function trackReview(workflowId) {
+			submitButton.disabled = true;
+			submitButton.querySelector("span").textContent = "Reviewing role…";
+			try {
+				while (true) {
+					const review = await api(`/api/reviews/${encodeURIComponent(workflowId)}`);
+					if (review.status === "complete") {
+						sessionStorage.removeItem(pendingReviewKey);
+						if (!review.opportunity) throw new Error("Review completed, but its saved result was not found.");
+						notice.textContent = "";
+						renderAnalysis(review.opportunity);
+						await loadList();
+						return;
+					}
+					if (["errored", "terminated"].includes(review.status)) {
+						sessionStorage.removeItem(pendingReviewKey);
+						throw new Error("The review could not be completed. Please try again.");
+					}
+					notice.textContent = "Review running in the background.";
+					await new Promise((resolve) => setTimeout(resolve, 2000));
+				}
+			} catch (error) {
+				if (error.status === 404) sessionStorage.removeItem(pendingReviewKey);
+				notice.textContent = error.message;
+			} finally {
+				submitButton.disabled = false;
+				submitButton.querySelector("span").textContent = "Analyze & save";
+			}
+		}
+		form.addEventListener("submit", async (event) => {
+			event.preventDefault();
+			notice.textContent = "";
+			const pendingReviewId = sessionStorage.getItem(pendingReviewKey);
+			if (pendingReviewId) {
+				await trackReview(pendingReviewId);
+				return;
+			}
+			submitButton.disabled = true;
+			submitButton.querySelector("span").textContent = "Reviewing role…";
+			const formData = new FormData(form);
+			try {
+				const { workflowId } = await api("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.fromEntries(formData)) });
+				sessionStorage.setItem(pendingReviewKey, workflowId);
+				await trackReview(workflowId);
+			} catch (error) { notice.textContent = error.message; }
+			finally { submitButton.disabled = false; submitButton.querySelector("span").textContent = "Analyze & save"; }
+		});
+		shortlist.addEventListener("change", async (event) => {
+			const select = event.target.closest("[data-status-id]");
+			if (!select) return;
+			try {
+				await api(`/api/opportunities/${encodeURIComponent(select.dataset.statusId)}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: select.value }) });
+			} catch (error) { notice.textContent = error.message; await loadList(); }
+		});
+		shortlist.addEventListener("click", async (event) => {
+			const viewButton = event.target.closest("[data-view-id]");
+			if (viewButton) {
+				const item = opportunities.find((opportunity) => opportunity.id === viewButton.dataset.viewId);
+				if (item) renderAnalysis(item);
+				return;
+			}
+			const button = event.target.closest("[data-delete-id]");
+			if (!button) return;
+			try {
+				await api(`/api/opportunities/${encodeURIComponent(button.dataset.deleteId)}`, { method: "DELETE" });
+				if (selectedOpportunityId === button.dataset.deleteId) {
+					results.classList.remove("visible");
+					selectedOpportunityId = null;
+				}
+				await loadList();
+			}
+			catch (error) { notice.textContent = error.message; }
+		});
+		loadList();
+		loadSession();
+		loadSchedule();
+		setInterval(() => { if (document.visibilityState === "visible") loadSchedule(); }, 60_000);
+		const pendingReviewId = sessionStorage.getItem(pendingReviewKey);
+		if (pendingReviewId) trackReview(pendingReviewId);
+	</script>
+</body>
+</html>

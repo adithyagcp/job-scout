@@ -1,0 +1,26 @@
+{
+  "name": "job-scout",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev --var LOCAL_AUTH_BYPASS:true",
+    "start": "wrangler dev --var LOCAL_AUTH_BYPASS:true",
+    "test": "vitest",
+    "cf-typegen": "wrangler types"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.4.3",
+    "@types/html-to-text": "^9.0.4",
+    "@types/node": "^26.6.6",
+    "typescript": "^5.5.2",
+    "vitest": "~5.0.3",
+    "wrangler": "^4.161.0"
+  },
+  "dependencies": {
+    "@auth/core": "^0.41.3",
+    "agents": "^0.33.0",
+    "html-to-text": "^10.0.1",
+    "jose": "^6.2.17"
+  }
+}
